@@ -1,0 +1,84 @@
+Certainly! Let's go through each line of the provided JavaScript code and explain its purpose:
+
+javascript
+
+let ulTasks = $('#ulTasks');
+let btnAdd = $('#btnAdd');
+let btnReset = $('#btnReset');
+let btnSort = $('#btnSort');
+let btnCleanup = $('#btnCleanup');
+let inpNewTask = $('#inpNewTask');
+
+    These lines declare variables and assign jQuery objects to them. These objects represent various elements in the HTML document. $ is a shorthand for the jQuery function, and $('#elementId') selects an element with the specified ID.
+
+javascript
+
+function addItem() {
+  let listItem = $('<li>', {
+    'class': 'list-group-item',
+    text: inpNewTask.val()
+  });
+  listItem.click(() => {
+    listItem.toggleClass('done');
+  });
+  ulTasks.append(listItem);
+  inpNewTask.val('');
+  toggleInputButtons();
+}
+
+    This defines a function addItem which is called when the "Add" button is clicked. It creates a new <li> element with a class of 'list-group-item' and text content from the input field (inpNewTask). It also adds a click event handler to toggle the 'done' class when the item is clicked. The new item is then appended to the ulTasks list, and the input field is cleared. Finally, the toggleInputButtons function is called to update button states.
+
+javascript
+
+function clearDone() {
+  $('#ulTasks .done').remove();
+  toggleInputButtons();
+}
+
+    This defines a function clearDone that removes list items with the 'done' class from the ulTasks list. After removal, it calls toggleInputButtons to update button states.
+
+javascript
+
+function sortTasks() {
+  $('#ulTasks .done').appendTo(ulTasks);
+}
+
+    This defines a function sortTasks that moves items with the 'done' class to the end of the ulTasks list.
+
+javascript
+
+function toggleInputButtons() {
+  btnReset.prop('disabled', inpNewTask.val() == '');
+  btnAdd.prop('disabled', inpNewTask.val() == '');
+  btnSort.prop('disabled', ulTasks.children().length < 1);
+  btnCleanup.prop('disabled', ulTasks.children().length < 1);
+}
+
+    This defines a function toggleInputButtons that enables or disables the buttons based on certain conditions. It checks if the input field is empty and adjusts the 'disabled' property of the buttons accordingly. Also, it checks if there are any items in the ulTasks list to enable or disable the "Sort" and "Cleanup" buttons.
+
+javascript
+
+inpNewTask.keypress((e) => {
+  if (e.which == 13) addItem();
+});
+
+    This attaches a keypress event listener to the inpNewTask input field. If the Enter key is pressed (e.which == 13), it calls the addItem function.
+
+javascript
+
+inpNewTask.on('input', toggleInputButtons);
+
+    This attaches an 'input' event listener to the inpNewTask input field. Whenever there is an input, it calls the toggleInputButtons function to update button states.
+
+javascript
+
+btnAdd.click(addItem);
+btnReset.click(() => {
+  inpNewTask.val('');
+  toggleInputButtons();
+});
+btnCleanup.click(clearDone);
+btnSort.click(sortTasks);
+
+    These lines attach click event listeners to the respective buttons. When the "Add" button is clicked, it calls addItem. The "Reset" button clears the input field and updates button states. The "Cleanup" button calls clearDone, and the "Sort" button calls sortTasks.
+
